@@ -1,4 +1,4 @@
-name: .NET
+name: merge
 
 on:
   pull_request:
