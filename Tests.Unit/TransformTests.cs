@@ -21,7 +21,7 @@
             };
 
             var confgiurationManger = new ConfigurationManager();
-            confgiurationManger.AddYamlFile(@".\Configuration\SimpleMapping.yaml");
+            confgiurationManger.AddYamlFile(@"./Configuration/SimpleMapping.yaml");
 
             // Act
             confgiurationManger.Transform();
@@ -36,7 +36,7 @@
         {
             // Arrange
             var confgiurationManger = new ConfigurationManager();
-            confgiurationManger.AddYamlFile(@".\Configuration\BrokenMapping.yaml");
+            confgiurationManger.AddYamlFile(@"./Configuration/BrokenMapping.yaml");
 
             // Act
             var action = confgiurationManger.Transform;
