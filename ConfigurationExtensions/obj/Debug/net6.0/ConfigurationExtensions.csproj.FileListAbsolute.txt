@@ -1,0 +1,12 @@
+C:\github\ConfigurationExtensions\ConfigurationExtensions\bin\Debug\net6.0\Zagidziran.ConfigurationExtensions.deps.json
+C:\github\ConfigurationExtensions\ConfigurationExtensions\bin\Debug\net6.0\Zagidziran.ConfigurationExtensions.dll
+C:\github\ConfigurationExtensions\ConfigurationExtensions\bin\Debug\net6.0\Zagidziran.ConfigurationExtensions.pdb
+C:\github\ConfigurationExtensions\ConfigurationExtensions\obj\Debug\net6.0\ConfigurationExtensions.csproj.AssemblyReference.cache
+C:\github\ConfigurationExtensions\ConfigurationExtensions\obj\Debug\net6.0\ConfigurationExtensions.GeneratedMSBuildEditorConfig.editorconfig
+C:\github\ConfigurationExtensions\ConfigurationExtensions\obj\Debug\net6.0\ConfigurationExtensions.AssemblyInfoInputs.cache
+C:\github\ConfigurationExtensions\ConfigurationExtensions\obj\Debug\net6.0\ConfigurationExtensions.AssemblyInfo.cs
+C:\github\ConfigurationExtensions\ConfigurationExtensions\obj\Debug\net6.0\ConfigurationExtensions.csproj.CoreCompileInputs.cache
+C:\github\ConfigurationExtensions\ConfigurationExtensions\obj\Debug\net6.0\Zagidziran.ConfigurationExtensions.dll
+C:\github\ConfigurationExtensions\ConfigurationExtensions\obj\Debug\net6.0\refint\Zagidziran.ConfigurationExtensions.dll
+C:\github\ConfigurationExtensions\ConfigurationExtensions\obj\Debug\net6.0\Zagidziran.ConfigurationExtensions.pdb
+C:\github\ConfigurationExtensions\ConfigurationExtensions\obj\Debug\net6.0\ref\Zagidziran.ConfigurationExtensions.dll

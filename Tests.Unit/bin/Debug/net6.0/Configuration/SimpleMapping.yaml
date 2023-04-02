@@ -1,0 +1,6 @@
+﻿someData:
+  value1: 1
+
+referncedData: $(someData)
+referncedData2: $(someData.value1)
+referncedData3: Text$(someData.value1)
