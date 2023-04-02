@@ -1,6 +1,6 @@
 # Configuration Transformation Classes
 ## ConfigurationExtensions
-Is a set of classes allowing to map configuration secitons or values over ConfigurationManager.
+Is a set of classes allowing to map configuration sections or values over ConfigurationManager.
 
 ### Usage 
 Add using directive and go ahead!
@@ -21,10 +21,6 @@ mappedData: $(someData)
 mappedValue: $(someData.value1)
 constructedValue: Text$(someData.value1)
 ```
-
-
-Additionally you can try *WithTimeout* extension method to specify wait timeout or *cancellationToken* to pass cancellation token.
-
 ### NuGet
 
 Nuget package to use is Zagidziran.ConfigurationExtensions. Awailable on nuget.org
