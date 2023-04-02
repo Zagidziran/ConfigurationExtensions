@@ -16,7 +16,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\$configuration$\net6.0\Zagidziran.Concurrent.AwaitableWaitHandle.dll" target="lib\net5.0\" />
-    <file src="bin\$configuration$\net6.0\Zagidziran.Concurrent.AwaitableWaitHandle.pdb" target="lib\net6.0\" />
+    <file src="bin\$configuration$\net6.0\Zagidziran.ConfigurationExtensions.dll" target="lib\net5.0\" />
+    <file src="bin\$configuration$\net6.0\Zagidziran.ConfigurationExtensions.pdb" target="lib\net6.0\" />
   </files>
 </package>
