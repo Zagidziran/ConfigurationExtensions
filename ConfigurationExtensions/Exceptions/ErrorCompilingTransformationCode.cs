@@ -7,7 +7,7 @@
     internal class ErrorCompilingTransformationCode : Exception
     {
         public ErrorCompilingTransformationCode(string code, ImmutableArray<Diagnostic> diagnostics)
-            : base($"Error compiling code. See {nameof(Diagnostics)} property.")
+            : base($"Error compiling code.\r\n{FormatDiagnostics(diagnostics)}")
         {
             this.Code = code;
             this.Diagnostics = diagnostics;
@@ -16,5 +16,10 @@
         public string Code { get; }
         
         public ImmutableArray<Diagnostic> Diagnostics { get; }
+
+        private static string FormatDiagnostics(ImmutableArray<Diagnostic> diagnostics)
+        { 
+            return string.Join(Environment.NewLine, diagnostics);
+        }
     }
 }
