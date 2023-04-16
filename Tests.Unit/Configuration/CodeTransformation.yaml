@@ -1,0 +1,18 @@
+﻿someData:
+  value1: "7 "
+  value2: boys army
+
+referncedData: |-
+  ${
+     return Configuration["someData:value1"] + Configuration["someData:value2"];
+   }
+
+superData:
+  multippleDatas: |-
+    ${
+       var result = new Dictionary<string, string>();
+       result["first"] = Configuration["someData:value1"];
+       result["second"] = Configuration["someData:value1"] + "second";
+       return result;
+     }
+  

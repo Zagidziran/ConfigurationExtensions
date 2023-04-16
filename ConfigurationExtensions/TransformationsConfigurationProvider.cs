@@ -1,23 +1,30 @@
 namespace Zagidziran.ConfigurationExtensions
 {
+    using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text;
-    using System.Text.RegularExpressions;
     using Microsoft.Extensions.Configuration;
     using Zagidziran.ConfigurationExtensions.Exceptions;
+    using Zagidziran.ConfigurationExtensions.Substitutions;
+    using Zagidziran.ConfigurationExtensions.Transformations;
+    using Zagidziran.ConfigurationExtensions.Transformations.Code;
+    using Zagidziran.ConfigurationExtensions.Transformations.Mappings;
 
     internal sealed class TransformationsConfigurationProvider : ConfigurationProvider
     {
         private readonly Dictionary<string, string> originalConfiguration;
 
-        private readonly Regex singleStatementRegex = new Regex(@"(\$\(.*?\))", RegexOptions.Compiled);
+        private readonly ITransformer mappingTransformer = new MappingTransformer();
+
+        private readonly ITransformer codeTransformer;
 
         public TransformationsConfigurationProvider(
+            CodeGenerationConfiguration codeGenerationConfiguration,
             IEnumerable<KeyValuePair<string, string>> originalConfiguration)
         {
             this.originalConfiguration = new Dictionary<string, string>(originalConfiguration);
+            this.codeTransformer = new CodeTransformer(codeGenerationConfiguration);
         }
 
         public override void Load()
@@ -29,41 +36,53 @@ namespace Zagidziran.ConfigurationExtensions
                     continue;
                 }
 
-                var matches = this.singleStatementRegex.Matches(configurationItem.Value);
+                var substitutions =
+                    SubstitutionLocator.FindSubstitutions(configurationItem.Value)
+                    .ToList();
 
-                // If it is the full match we can copy full hierarcy
-                if (matches.Count == 1 && matches[0].Value == configurationItem.Value)
+                if (substitutions.Count == 1 && configurationItem.Value == substitutions[0].Definition)
                 {
-                    var prefix = this.ExtractKeyFromMatch(matches[0]);
-                    var keys = this.originalConfiguration
-                        .Where(k => k.Key.StartsWith(prefix + ":") || k.Key == prefix)
-                        .ToList();
-
-                    if (!keys.Any())
+                    var transformationResult = this.Transform(substitutions[0]);
+                    switch (transformationResult)
                     {
-                        throw new ReferencedKeyNotFoundExcepion(configurationItem.Key, this.ExtractKeyFromMatch(matches[0]), "Referenced key not found.");
-                    }
+                        case StringTransformationResult str:
+                            this.Data[configurationItem.Key] = str.Data;
+                            break;
 
-                    foreach (var configurationKey in keys)
-                    {
-                        var resultingKey = configurationItem.Key + configurationKey.Key.Substring(prefix.Length);
-                        this.Data[resultingKey] = configurationKey.Value;
+                        case NullTransformationResult _:
+                            this.Data[configurationItem.Key] = null;
+                            break;
+
+                        case DictionaryTransformationResult dictionary:
+                            foreach (var entry in dictionary.Data)
+                            {
+                                var resultingKey = entry.Key == string.Empty
+                                    ? configurationItem.Key
+                                    : configurationItem.Key + ":" + entry.Key;
+
+                                this.Data[resultingKey] = entry.Value;
+                            }
+                            break;
                     }
                 }
-                else if(matches.Count > 0)
+                else if (substitutions.Count > 0)
                 {
                     var stringBuilder = new StringBuilder();
                     var currentPosition = 0;
-                    foreach (Match match in matches)
+
+                    foreach (var substitution in substitutions)
                     {
-                        if (!this.TryEvaluateMatch(match, out var replacement))
+                        var transformationResult = this.Transform(substitution);
+
+                        if (transformationResult is not StringTransformationResult stringResult)
                         {
-                            throw new ReferencedKeyNotFoundExcepion(configurationItem.Key, this.ExtractKeyFromMatch(match), "Referenced key not found.");
+                            throw new TransformationResultNotSupportedException(transformationResult);
                         }
 
-                        stringBuilder.Append(configurationItem.Value.Substring(currentPosition, match.Index));
-                        stringBuilder.Append(replacement);
-                        currentPosition = match.Index + match.Length;
+                        stringBuilder.Append(configurationItem.Value.Substring(currentPosition, substitution.Index));
+                        stringBuilder.Append(stringResult.Data);
+                        
+                        currentPosition = substitution.Index + substitution.Length;
                     }
 
                     this.Data[configurationItem.Key] = stringBuilder.ToString();
@@ -71,24 +90,16 @@ namespace Zagidziran.ConfigurationExtensions
             }
         }
 
-        private bool TryEvaluateMatch(Match match, [NotNullWhen(true)]out string? value)
+        private ITransformationResult Transform(Substitution substitution)
         {
-            var dictionaryKey = this.ExtractKeyFromMatch(match);
-            
-            if (this.originalConfiguration.ContainsKey(dictionaryKey))
-            { 
-                value = this.originalConfiguration[dictionaryKey];
-                return true;
-            }
+            var transformer = substitution.Kind switch
+            {
+                SubstitutionKind.Mapping => this.mappingTransformer,
+                SubstitutionKind.Code => this.codeTransformer,
+                _ => throw new ApplicationException("It should not happen!")
+            };
 
-            value = null;
-            return false;
-        }
-
-        private string ExtractKeyFromMatch(Match match)
-        {
-            // Extracting value from @(operator)
-            return match.Value.Substring(2, match.Length - 3).Replace(".", ":");
+            return transformer.Transform(substitution, this.originalConfiguration);
         }
     }
 }

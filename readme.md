@@ -1,6 +1,6 @@
 # Configuration Transformation Classes
 ## ConfigurationExtensions
-Is a set of classes allowing to map configuration secitons or values over ConfigurationManager.
+Is a set of classes allowing to map ad transform configuration secitons or values over ConfigurationManager.
 
 ### Usage 
 Add using directive and go ahead!
@@ -18,13 +18,24 @@ someData:
   someValue: 1
 
 mappedData: $(someData)
-mappedValue: $(someData.value1)
-constructedValue: Text$(someData.value1)
+mappedValue: $(someData:value1)
+constructedValue: Text$(someData:value1)
 ```
 
+### Advanced Usage 
 
-Additionally you can try *WithTimeout* extension method to specify wait timeout or *cancellationToken* to pass cancellation token.
+In advanced scenario you may use C# code to define your transformation. 
 
+```
+someData:
+  someValue: 1
+
+multioledVale: |-
+  ${
+    var someValue = int.Parse(Configuration["someData:someValue"]);
+    return someValue * 17;
+  }
+```
 ### NuGet
 
 Nuget package to use is Zagidziran.ConfigurationExtensions. Awailable on nuget.org
@@ -32,6 +43,8 @@ Nuget package to use is Zagidziran.ConfigurationExtensions. Awailable on nuget.o
 
 ### A Few Explanation Words
 
-When you call the Transform() method the code traverses through configuration and replaces entries in the round brackets with dollar sign
-like this $(someReference). The text inside the brackets should point to existing configuration key or you get ReferencedKeyNotFoundException.
+When you call the Transform() method the code traverses through configuration and replaces entries in the brackets or parentheses with leading dollar sign.
+Parentheses allows to map a configuration value to another one. When bracers allows to write a C# code returning a dictionary string or null.
+The text inside the parentheses should point to existing configuration key or you get ReferencedKeyNotFoundException. The delimiter is semicolon.
+The code may return doctionary. Thereat all dictionary content will be added to configuration with prefix pointing to the code.
 The only values are transformed, not keys.

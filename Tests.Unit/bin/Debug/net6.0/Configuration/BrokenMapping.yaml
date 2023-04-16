@@ -1,4 +1,0 @@
-﻿someData:
-  value1: 1
-
-referncedData: $(someMissingData.data)

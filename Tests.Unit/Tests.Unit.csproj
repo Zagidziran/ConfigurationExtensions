@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Configuration\CodeTransformation.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configuration\BrokenMapping.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

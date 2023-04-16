@@ -5,7 +5,7 @@
     using Microsoft.Extensions.Configuration;
     using Xunit;
     using Zagidziran.ConfigurationExtensions;
-    using Zagidziran.ConfigurationExtensions.Exceptions;
+    using Zagidziran.ConfigurationExtensions.Transformations.Mappings.Exceptions;
 
     public class TransformTests
     {
@@ -43,7 +43,29 @@
 
             // Assert
             action.Should().Throw<ReferencedKeyNotFoundExcepion>()
-                .Which.ReferencedKey.Should().Be("someMissingData:data");
+                .Which.ReferencedKey.Should().Be("someMissingData.data");
+        }
+
+        [Fact]
+        public void ShouldTransformUsingCode()
+        {
+            // Arrange
+            var expected = new Dictionary<string, string>()
+            {
+                ["referncedData"] = "7 boys army",
+                ["superData:multippleDatas:first"] = "7 ",
+                ["superData:multippleDatas:second"] = "7 second",
+            };
+
+            var confgiurationManger = new ConfigurationManager();
+            confgiurationManger.AddYamlFile(@"./Configuration/CodeTransformation.yaml");
+
+            // Act
+            confgiurationManger.Transform();
+            var configuration = confgiurationManger.AsEnumerable();
+
+            // Assert
+            configuration.Should().Contain(expected);
         }
     }
 }
