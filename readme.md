@@ -1,6 +1,6 @@
 # Configuration Transformation Classes
 ## ConfigurationExtensions
-Is a set of classes allowing to map ad transform configuration secitons or values over ConfigurationManager.
+Is a set of classes allowing to map and transform configuration secitons or values over ConfigurationManager.
 
 ### Usage 
 Add using directive and go ahead!
