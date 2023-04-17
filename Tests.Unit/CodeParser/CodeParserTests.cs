@@ -60,6 +60,7 @@
             var expected = TestClass.Name;
             var code = @"
                 using Tests.Unit.CodeParser;
+
                 return TestClass.Name;";
 
             var transformer = CodeParser.Parse(code, Assembly.GetExecutingAssembly());
