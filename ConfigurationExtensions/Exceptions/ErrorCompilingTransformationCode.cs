@@ -7,7 +7,7 @@
     internal class ErrorCompilingTransformationCode : Exception
     {
         public ErrorCompilingTransformationCode(string code, string formattedCode, ImmutableArray<Diagnostic> diagnostics)
-            : base($"Error compiling code.\r\n{code}\r\n{formattedCode}\r\n{FormatDiagnostics(diagnostics)}")
+            : base($"Error compiling code.\r\n{code}\r\nFormatted code:\r\n{formattedCode}\r\n{FormatDiagnostics(diagnostics)}")
         {
             this.Code = code;
             this.FormattedCode = formattedCode;

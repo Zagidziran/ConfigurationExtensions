@@ -45,7 +45,7 @@
         private static string FormatCode(string code, string className)
         {
 
-            var lines = code.Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+            var lines = code.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             var codeBuilder = new StringBuilder(@"using System.Collections.Generic;
                 using Zagidziran.ConfigurationExtensions.Transformations.Code;");
 
