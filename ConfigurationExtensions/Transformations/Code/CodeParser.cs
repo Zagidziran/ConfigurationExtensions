@@ -30,7 +30,7 @@
             var emitResult = compilation.Emit(il);
             if (!emitResult.Success)
             {
-                throw new ErrorCompilingTransformationCode(code, emitResult.Diagnostics);
+                throw new ErrorCompilingTransformationCode(code, formattedCode, emitResult.Diagnostics);
             }
 
             il.Seek(0, SeekOrigin.Begin);
