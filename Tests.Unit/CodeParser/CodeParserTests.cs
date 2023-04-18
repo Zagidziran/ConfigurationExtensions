@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.Reflection;
     using Xunit;
-    using Zagidziran.ConfigurationExtensions.Exceptions;
     using Zagidziran.ConfigurationExtensions.Transformations.Code;
 
     public class CodeParserTests
